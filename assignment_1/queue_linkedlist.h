@@ -5,20 +5,30 @@
 
 #include "node.h"
 
-/*
-Queue functions:
-enqueue(item): adds the item to the back of the queue.
-dequeue(): returns the first element of the queue and deletes it from the queue.
-size(): returns the size of the queue.
-isEmpty(): checks whether the queue is empty or not.
-*/
+/**
+ * @class Queue
+ * @brief A queue implementation using a linked list.
+ * 
+ * This class represents a simple queue data structure where elements
+ * are added to the back of the queue and removed from the front. The queue
+ * follows a First-In-First-Out (FIFO) order. The underlying implementation
+ * uses a linked list for dynamic memory allocation.
+ * 
+ * @tparam Item The type of elements stored in the queue.
+ * 
+ * The following operations are supported:
+ * - **enqueue(item)**: Adds the specified item to the back of the queue.
+ * - **dequeue()**: Removes and returns the item from the front of the queue.
+ * - **size()**: Returns the number of items currently in the queue.
+ * - **isEmpty()**: Checks if the queue is empty.
+ */
 
 template <typename Item>
 class Queue {
  private:
-  struct Node<Item> *first;  // link to least recently added node
-  struct Node<Item> *last;   // link to most recently added node
-  int n;                     // number of items on the queue
+  struct Node<Item> *first;  ///< Pointer to the front of the queue (least recently added).
+  struct Node<Item> *last;   ///< Pointer to the back of the queue (most recently added).
+  int n;                     ///< The number of items currently in the queue.
 
  public:
   Queue() : first(NULL), last(NULL), n(0) {}
@@ -29,9 +39,16 @@ class Queue {
   Item dequeue();
 };
 
+/**
+ * @brief Adds an item to the back of the queue.
+ * 
+ * This function creates a new node with the given item and adds it to the end of the queue.
+ * If the queue is empty, the new node becomes both the first and last node.
+ * 
+ * @param item The item to add to the queue.
+ */
 template <typename Item>
 void Queue<Item>::enqueue(Item item) {
-  // Add item to the end of the list.
   Node<Item> *oldlast = last;
   last = new Node<Item>;
   last->item = item;
@@ -43,9 +60,16 @@ void Queue<Item>::enqueue(Item item) {
   n++;
 }
 
+/**
+ * @brief Removes and returns the item from the front of the queue.
+ * 
+ * This function removes the first node of the queue and returns its item. If the queue
+ * becomes empty after the operation, it sets the `last` pointer to `NULL`.
+ * 
+ * @return Item The item removed from the front of the queue.
+ */
 template <typename Item>
 Item Queue<Item>::dequeue() {
-  // Remove item from the beginning of the list
   Item item = first->item;
   Node<Item> *oldfirst = first;
   first = first->next;
@@ -55,6 +79,11 @@ Item Queue<Item>::dequeue() {
   return item;
 }
 
+/**
+ * @brief Destructor for the Queue class.
+ * 
+ * This function deallocates memory for all nodes in the stack.
+ */
 template <typename Item>
 Queue<Item>::~Queue() {
   while (first != NULL) {

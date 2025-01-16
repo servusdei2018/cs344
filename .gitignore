@@ -31,3 +31,6 @@ main
 *.exe
 *.out
 *.app
+
+# IDE files
+.vscode/*
