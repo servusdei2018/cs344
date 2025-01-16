@@ -33,20 +33,45 @@ struct Person {
  * @param f The input file stream to read the person data from.
  * @return A pointer to an instance of the container `T` (either `Stack<Person>` or `Queue<Person>`).
  */
-template <typename T, typename = enable_if<is_same_v<T, Stack<Person>> ||
-                                           is_same_v<T, Queue<Person>>>>
-T* process(std::ifstream& f) {
-  return new T;
+template <typename T, typename = enable_if_t<is_same_v<T, Stack<Person>> || is_same_v<T, Queue<Person>>>>
+T* process(ifstream& f) { 
+  auto container = new T;
+  Person p;
+  while (f >> p.name >> p.time_arrived >> p.time_requested) {
+    if constexpr (is_same_v<T, Stack<Person>>) {
+      container->push(p);
+    } else if constexpr (is_same_v<T, Queue<Person>>) {
+      container->enqueue(p);
+    }
+  }
+  return container;
+}
+
+template <typename T, typename = enable_if_t<is_same_v<T, Stack<Person>> || is_same_v<T, Queue<Person>>>>
+void display(T* container) { 
+  while (!container->isEmpty()) {
+    Person p;
+    if constexpr (is_same_v<T, Stack<Person>>) {
+      p = container->pop();
+    } else if constexpr (is_same_v<T, Queue<Person>>) {
+      p = container->dequeue();
+    }
+    cout << p.name << " " << p.time_arrived << " " << p.time_requested << endl;
+  }
 }
 
 int main() {
   ifstream f;
   f.open("personin.txt");
-  process<Stack<Person>>(f);
+  
+  auto stack = process<Stack<Person>>(f);
+  display(stack);
 
-  f.seekg(0);
   f.clear();
-  process<Queue<Person>>(f);
+  f.seekg(0, ios::beg);
+
+  auto queue = process<Queue<Person>>(f);
+  display(queue);
 
   f.close();
 }
