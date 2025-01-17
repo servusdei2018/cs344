@@ -1,4 +1,13 @@
 .PHONY = format
 
+default: format
+
 format:
-		find . -type f -name "*.cpp" -o -name "*.h" -o -name "*.cxx" -o -name "*.hpp" -exec clang-format -i {} +
+	find . \
+         \( -name '*.c' \
+         -o -name '*.cc' \
+         -o -name '*.cpp' \
+         -o -name '*.h' \
+         -o -name '*.hh' \
+         -o -name '*.hpp' \) \
+         -exec clang-format -i '{}' \;
