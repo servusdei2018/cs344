@@ -35,8 +35,6 @@ struct Person {
  * instantiated for `Stack` or `Queue` of `Person` objects.
  *
  * @param f The input file stream to read the person data from.
- * @return A pointer to an instance of the container `T` (either `Stack<Person>`
- * or `Queue<Person>`).
  */
 template <typename T, typename = enable_if_t<is_same_v<T, Stack<Person>> ||
                                              is_same_v<T, Queue<Person>>>>
