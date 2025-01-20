@@ -26,8 +26,6 @@ struct Person {
   int time_requested;
 };
 
-#include "stack_linkedlist.h"  // Include your Stack definition
-
 /**
  * @brief Reinserts an item to the front of the stack.
  *
@@ -37,23 +35,21 @@ struct Person {
  * @param stack The stack to modify.
  * @param item The item to insert at the top of the stack.
  */
- // Function to reinsert an item to the front of a Stack or Queue
- template <typename T>
- void reinstateFront(T* container, Person item) {
-     if constexpr (is_same_v<T, Stack<Person>>) {
-         Stack<Person> tmp;
-         while (!container->isEmpty()) {
-             tmp.push(container->pop());
-         }
-         container->push(item);
-         while (!tmp.isEmpty()) {
-             container->push(tmp.pop());
-         }
-     } else {
-         cout << "Not same";
-     }
- }
-
+template <typename T>
+void reinstateFront(T* container, Person item) {
+  if constexpr (is_same_v<T, Stack<Person>>) {
+    Stack<Person> tmp;
+    while (!container->isEmpty()) {
+      tmp.push(container->pop());
+    }
+    container->push(item);
+    while (!tmp.isEmpty()) {
+      container->push(tmp.pop());
+    }
+  } else {
+    cout << "Not same";
+  }
+}
 
 /**
  * @brief Processes a file to create and manage a queue or stack of `Person`
