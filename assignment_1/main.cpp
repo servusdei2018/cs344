@@ -46,8 +46,6 @@ void reinstateFront(T* container, Person item) {
     while (!tmp.isEmpty()) {
       container->push(tmp.pop());
     }
-  } else {
-    cout << "Not same";
   }
 }
 
