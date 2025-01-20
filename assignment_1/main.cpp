@@ -26,6 +26,35 @@ struct Person {
   int time_requested;
 };
 
+#include "stack_linkedlist.h"  // Include your Stack definition
+
+/**
+ * @brief Reinserts an item to the front of the stack.
+ *
+ * This function duplicates the current stack's items, pushes the new item
+ * to the top, and then pushes all other items back in their original order.
+ *
+ * @param stack The stack to modify.
+ * @param item The item to insert at the top of the stack.
+ */
+ // Function to reinsert an item to the front of a Stack or Queue
+ template <typename T>
+ void reinstateFront(T* container, Person item) {
+     if constexpr (is_same_v<T, Stack<Person>>) {
+         Stack<Person> tmp;
+         while (!container->isEmpty()) {
+             tmp.push(container->pop());
+         }
+         container->push(item);
+         while (!tmp.isEmpty()) {
+             container->push(tmp.pop());
+         }
+     } else {
+         cout << "Not same";
+     }
+ }
+
+
 /**
  * @brief Processes a file to create and manage a queue or stack of `Person`
  * objects, displaying the schedule in which people arrive and are met with.
@@ -43,7 +72,7 @@ template <typename T, typename = enable_if_t<is_same_v<T, Stack<Person>> ||
 void process(ifstream& f) {
   int current_time = 0;    // Track the current time for meetings
   auto container = new T;  // Stack or Queue to hold the people
-  Person p, next, in_line;
+  Person p, next;
 
   f >> p.name >> p.time_arrived >> p.time_requested;
   cout << (is_same_v<T, Stack<Person>>
@@ -85,6 +114,24 @@ void process(ifstream& f) {
       } else if constexpr (is_same_v<T, Queue<Person>>) {
         next_in_line =
             container->dequeue();  // Get the next person from queue (FIFO)
+      }
+
+      if (next.time_arrived <= current_time && is_same_v<T, Stack<Person>>) {
+        // Process the new arrival immediately
+        cout << next.name << " arrives at " << next.time_arrived
+             << " and requests a meeting length of " << next.time_requested
+             << "\n";
+        if (current_time < next.time_arrived) {
+          current_time = next.time_arrived;  // Adjust time if professor is idle
+        }
+        cout << next.name << " meets from " << current_time << " to "
+             << current_time + next.time_requested << "\n";
+        current_time += next.time_requested;
+
+        // After processing the new arrival, break out and continue reading for
+        // other new arrivals
+        reinstateFront(container, next_in_line);
+        break;
       }
 
       if (current_time < next_in_line.time_arrived) {
