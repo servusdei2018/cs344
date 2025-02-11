@@ -3,11 +3,4 @@
 default: format
 
 format:
-	find . \
-         \( -name '*.c' \
-         -o -name '*.cc' \
-         -o -name '*.cpp' \
-         -o -name '*.h' \
-         -o -name '*.hh' \
-         -o -name '*.hpp' \) \
-         -exec clang-format -i '{}' \;
+	find . -type f \( -name "*.cpp" -o -name "*.cxx" -o -name "*.h" -o -name "*.hpp" \) | xargs clang-format -i
